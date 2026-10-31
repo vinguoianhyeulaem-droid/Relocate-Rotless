@@ -1,4 +1,3 @@
-
 name: Build Relocate Rootless
 
 on:
@@ -12,32 +11,42 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout source
         uses: actions/checkout@v4
 
       - name: Setup Theos
         uses: waruhachi/theos-action@v2.6.5
 
-      - name: Inspect CepheiPrefs headers
+      - name: Inspect CepheiPrefs and source compatibility
+        shell: bash
         run: |
-          echo "Available CepheiPrefs headers:"
-          find "$THEOS/vendor" \
-            \( -name '*Appearance*' \
-            -o -name 'CepheiPrefs.h' \
-            -o -name 'HBListController.h' \)
+          echo '=== Active rootless CepheiPrefs headers ==='
+          ROOTLESS_HEADERS="$THEOS/vendor/lib/iphone/rootless/CepheiPrefs.framework/Headers"
+          if [ -d "$ROOTLESS_HEADERS" ]; then
+            find "$ROOTLESS_HEADERS" -maxdepth 1 -type f -print | sort
+          else
+            echo 'Rootless CepheiPrefs framework headers not found.'
+          fi
+          echo '=== Appearance imports in repository ==='
+          grep -Rn 'HBAppearanceSettings\|CepheiPrefs.h' Prefs || true
+          echo '=== Original legacy header availability ==='
+          find "$THEOS/vendor/lib" -name 'HBAppearanceSettings.h' -print || true
 
-      - name: Build rootless
+      - name: Compile and package rootless
+        shell: bash
+        env:
+          THEOS_PACKAGE_SCHEME: rootless
         run: |
+          set -o pipefail
           make clean
-          make package FINALPACKAGE=1 \
-            THEOS_PACKAGE_SCHEME=rootless \
-            ARCHS=arm64 \
-            TARGET=iphone:clang:latest:15.0
+          make package FINALPACKAGE=1 ARCHS=arm64 TARGET=iphone:clang:latest:15.0
 
-      - name: Upload DEB
+      - name: Upload build logs and DEB
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Relocate-rootless-build
-          path: packages/*.deb
+          name: Relocate-rootless-output
+          path: |
+            packages/*.deb
+            .theos/obj/**/*.log
           if-no-files-found: warn
