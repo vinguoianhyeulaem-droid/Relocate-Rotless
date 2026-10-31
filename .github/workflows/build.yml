@@ -32,6 +32,43 @@ jobs:
           echo '=== Original legacy header availability ==='
           find "$THEOS/vendor/lib" -name 'HBAppearanceSettings.h' -print || true
 
+      
+      - name: Patch missing headers
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          # Add UIKit and QuartzCore to view headers
+          for name in [
+              "RLCHelpView.h",
+              "RLCCrossHairView.h",
+          ]:
+              p = Path("Prefs") / name
+              if p.exists():
+                  s = p.read_text()
+                  imports = (
+                      "#import <UIKit/UIKit.h>\n"
+                      "#import <QuartzCore/QuartzCore.h>\n"
+                  )
+                  if "#import <UIKit/UIKit.h>" not in s:
+                      s = imports + s
+                  p.write_text(s)
+
+          # Replace missing individual import with umbrella header
+          for p in Path("Prefs").rglob("*"):
+              if p.suffix not in (".h", ".m", ".mm"):
+                  continue
+              s = p.read_text()
+              s = s.replace(
+                  "#import <CepheiPrefs/HBAppearanceSettings.h>",
+                  "#import <CepheiPrefs/CepheiPrefs.h>"
+              )
+              p.write_text(s)
+
+          print("Header patches applied.")
+          PY
+
+
       - name: Compile and package rootless
         shell: bash
         env:
