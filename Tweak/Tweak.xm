@@ -1,3 +1,5 @@
+#import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 #import <Cephei/HBPreferences.h>
 #import "Tweak.h"
 #import "RLCLocationManagerDelegate.h"

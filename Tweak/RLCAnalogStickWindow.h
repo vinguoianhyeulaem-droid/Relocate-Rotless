@@ -1,3 +1,5 @@
+#import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 @interface RLCAnalogStickWindow : UIWindow
 
 @property (nonatomic, assign) CGRect circleFrame;
