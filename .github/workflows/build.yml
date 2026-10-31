@@ -18,6 +18,51 @@ jobs:
       - name: Setup Theos
         uses: waruhachi/theos-action@v2.6.5
 
+        
+name: Build Relocate Rootless
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - rootless-test
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Theos
+        uses: waruhachi/theos-action@v2.6.5
+
+      - name: Inspect CepheiPrefs headers
+        run: |
+          echo "Available CepheiPrefs headers:"
+          find "$THEOS/vendor" \
+            \( -name '*Appearance*' \
+            -o -name 'CepheiPrefs.h' \
+            -o -name 'HBListController.h' \)
+
+      - name: Build rootless
+        run: |
+          make clean
+          make package FINALPACKAGE=1 \
+            THEOS_PACKAGE_SCHEME=rootless \
+            ARCHS=arm64 \
+            TARGET=iphone:clang:latest:15.0
+
+      - name: Upload DEB
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Relocate-rootless-build
+          path: packages/*.deb
+          if-no-files-found: warn
+
+
       - name: Build rootless
         run: |
           make clean
