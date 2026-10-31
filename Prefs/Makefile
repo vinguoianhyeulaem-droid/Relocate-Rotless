@@ -1,5 +1,5 @@
 ARCHS = arm64 arm64e
-TARGET = iphone:clang:11.2:11.2
+TARGET = iphone:clang:latest:15.0
 
 include $(THEOS)/makefiles/common.mk
 
@@ -11,6 +11,7 @@ $(BUNDLE_NAME)_LIBRARIES = applist
 $(BUNDLE_NAME)_PRIVATE_FRAMEWORKS = Preferences
 $(BUNDLE_NAME)_EXTRA_FRAMEWORKS = Cephei CepheiPrefs
 ADDITIONAL_OBJCFLAGS = -fobjc-arc
+ADDITIONAL_CFLAGS += -Wno-error=deprecated-declarations
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 
