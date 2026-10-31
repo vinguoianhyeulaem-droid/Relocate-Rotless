@@ -67,6 +67,25 @@ jobs:
 
           print("Header patches applied.")
           PY
+      
+      - name: Check AppList linking
+        run: |
+          echo "Checking AppList libraries..."
+
+          find "$THEOS/vendor/lib" \
+            \( -iname '*applist*' -o -iname '*sparkapplist*' \) \
+            -print
+
+          echo "Checking rootless AppList..."
+          if [ -f "$THEOS/vendor/lib/iphone/rootless/libapplist.tbd" ]; then
+            echo "Rootless AppList stub found."
+          else
+            echo "Rootless AppList stub missing."
+          fi
+
+          echo "Checking AppList dependency..."
+          grep -Rni 'LIBRARIES.*applist' Prefs || true
+    
 
 
       - name: Compile and package rootless
