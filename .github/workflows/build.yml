@@ -86,27 +86,23 @@ jobs:
           echo "Checking AppList dependency..."
           grep -Rni 'LIBRARIES.*applist' Prefs || true
       
-      - name: Verify rootless AppList library
+      
+      - name: Install rootless AppList link stub
         shell: bash
         run: |
-          set -e
-
-          echo "Checking AppList libraries"
-
-          find "$THEOS/vendor/lib" \
-            -iname '*applist*' -print
+          set -euo pipefail
 
           ROOTLESS_DIR="$THEOS/vendor/lib/iphone/rootless"
           mkdir -p "$ROOTLESS_DIR"
 
-          if [ -f "$ROOTLESS_DIR/libapplist.tbd" ] ||
-             [ -f "$ROOTLESS_DIR/libapplist.dylib" ]; then
-            echo "Rootless AppList library found"
-          else
-            echo "::error::Missing rootless AppList link library"
-            echo "Need a rootless-compatible AppList .tbd or .dylib"
-            exit 1
-          fi
+          curl -fL --retry 3 \
+            "https://raw.githubusercontent.com/theos/lib/master/iphone/rootless/libapplist.tbd" \
+            -o "$ROOTLESS_DIR/libapplist.tbd"
+
+          echo "Rootless AppList stub:"
+          ls -lh "$ROOTLESS_DIR/libapplist.tbd"
+          head -n 15 "$ROOTLESS_DIR/libapplist.tbd"
+
     
     
 
