@@ -68,26 +68,25 @@ jobs:
           print("Header patches applied.")
           PY
       
-      - name: Check AppList linking
+      - name: Install AppList rootless build library
+        shell: bash
         run: |
-          echo "Checking AppList libraries..."
+          set -euo pipefail
 
-          find "$THEOS/vendor/lib" \
-            \( -iname '*applist*' -o -iname '*sparkapplist*' \) \
-            -print
+          DEB="deps/xyz.cypwn.applist_1.5.16_iphoneos-arm64.deb"
+          EXTRACT="$RUNNER_TEMP/applist"
+          DEST="$THEOS/vendor/lib/iphone/rootless"
 
-          echo "Checking rootless AppList..."
-          if [ -f "$THEOS/vendor/lib/iphone/rootless/libapplist.tbd" ]; then
-            echo "Rootless AppList stub found."
-          else
-            echo "Rootless AppList stub missing."
-          fi
+          mkdir -p "$EXTRACT" "$DEST"
 
-          echo "Checking AppList dependency..."
-          grep -Rni 'LIBRARIES.*applist' Prefs || true
-      
-      
-      
+          ar -p "$DEB" data.tar.gz | tar -xz -C "$EXTRACT"
+
+          cp "$EXTRACT/var/jb/usr/lib/libapplist.dylib" \
+            "$DEST/libapplist.dylib"
+
+          echo "AppList rootless installed for linking"
+          ls -lh "$DEST/libapplist.dylib"
+
       - name: Compile and package rootless
         shell: bash
         env:
