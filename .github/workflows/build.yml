@@ -87,26 +87,7 @@ jobs:
           grep -Rni 'LIBRARIES.*applist' Prefs || true
       
       
-      - name: Install rootless AppList link stub
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          ROOTLESS_DIR="$THEOS/vendor/lib/iphone/rootless"
-          mkdir -p "$ROOTLESS_DIR"
-
-          curl -fL --retry 3 \
-            "https://raw.githubusercontent.com/theos/lib/master/iphone/rootless/libapplist.tbd" \
-            -o "$ROOTLESS_DIR/libapplist.tbd"
-
-          echo "Rootless AppList stub:"
-          ls -lh "$ROOTLESS_DIR/libapplist.tbd"
-          head -n 15 "$ROOTLESS_DIR/libapplist.tbd"
-
-    
-    
-
-
+      
       - name: Compile and package rootless
         shell: bash
         env:
