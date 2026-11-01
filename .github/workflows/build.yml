@@ -87,14 +87,38 @@ jobs:
           echo "AppList rootless installed for linking"
           ls -lh "$DEST/libapplist.dylib"
 
+      - name: Install patched iOS SDK
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git clone --depth 1 --filter=blob:none --sparse \
+            https://github.com/theos/sdks.git \
+            "$RUNNER_TEMP/theos-sdks"
+
+          cd "$RUNNER_TEMP/theos-sdks"
+          git sparse-checkout set iPhoneOS15.6.sdk
+
+          mkdir -p "$THEOS/sdks"
+          cp -R iPhoneOS15.6.sdk "$THEOS/sdks/"
+
+          SDK="$THEOS/sdks/iPhoneOS15.6.sdk"
+
+          test -d "$SDK/System/Library/PrivateFrameworks/Preferences.framework"
+
+          echo "Patched SDK installed"
+          ls "$SDK/System/Library/PrivateFrameworks/Preferences.framework"
+
       - name: Compile and package rootless
         shell: bash
-        env:
-          THEOS_PACKAGE_SCHEME: rootless
         run: |
           set -o pipefail
           make clean
-          make package FINALPACKAGE=1 ARCHS=arm64 TARGET=iphone:clang:latest:15.0
+          make package FINALPACKAGE=1 \
+            THEOS_PACKAGE_SCHEME=rootless \
+            ARCHS=arm64 \
+            TARGET=iphone:clang:15.6:15.0 \
+            SDKVERSION=15.6
 
       - name: Upload build logs and DEB
         if: always()
