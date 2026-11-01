@@ -1,1 +1,8 @@
-{ Filter = { Bundles = ( "com.apple.corelocation" ); }; }
+{
+    Filter = {
+        Bundles = (
+            "com.google.Maps",
+            "com.apple.Maps"
+        );
+    };
+}
