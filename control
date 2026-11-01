@@ -1,8 +1,8 @@
 Package: me.nepeta.relocate
-Name: Relocate
+Name: Relocate Rootless Test
 Depends: mobilesubstrate, ws.hbang.common (>= 1.11), firmware (>= 11.0), applist, com.rpetrich.rocketbootstrap (>= 0.1.7)
-Version: 0.1.11
-Architecture: iphoneos-arm
+Version: 0.1.12
+Architecture: iphoneos-arm64
 Description: Minimalist GPS spoofer (free)
 Maintainer: Nepeta
 Author: Nepeta

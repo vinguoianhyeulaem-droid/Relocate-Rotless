@@ -5,7 +5,7 @@
 #import "RLCLocationManagerDelegate.h"
 #import "RLCAnalogStickWindow.h"
 
-#define PLIST_PATH @"/var/lib/dpkg/info/me.nepeta.relocate.list"
+#define PLIST_PATH @"/var/jb/var/lib/dpkg/info/me.nepeta.relocate.list"
 
 HBPreferences *preferences;
 
