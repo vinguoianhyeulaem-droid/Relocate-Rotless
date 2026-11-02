@@ -418,6 +418,16 @@ RLCAnalogStickWindow *analogStickWindow;
 %end
 
 %ctor {
+    NSLog(@"[RLCDBG] Constructor loaded: %@",
+          [NSProcessInfo processInfo].processName);
+
+    NSLog(@"[RLCDBG] Executable: %@",
+          [NSProcessInfo processInfo].arguments.firstObject);
+
+    NSLog(@"[RLCDBG] Package file exists: %d",
+          [[NSFileManager defaultManager]
+              fileExistsAtPath:PLIST_PATH]);
+
     dpkgInvalid = ![[NSFileManager defaultManager] fileExistsAtPath:PLIST_PATH];
 
     // Someone smarter than me invented this.
@@ -523,5 +533,6 @@ RLCAnalogStickWindow *analogStickWindow;
         if (managerInitialized) [[RLCManager sharedInstance] update];
     }];
 
+    NSLog(@"[RLCDBG] Initializing CoreLocation hooks");
     %init(Relocate);
 }
