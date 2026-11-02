@@ -109,6 +109,11 @@ jobs:
           echo "Patched SDK installed"
           ls "$SDK/System/Library/PrivateFrameworks/Preferences.framework"
 
+      - name: Add Relocate 0.1.15 diagnostics
+        shell: bash
+        run: |
+          python3 patch_relocate_015.py Tweak/Tweak.xm
+
       - name: Compile and package rootless
         shell: bash
         run: |
