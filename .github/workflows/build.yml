@@ -114,6 +114,11 @@ jobs:
         run: |
           python3 patch_relocate_015.py Tweak/Tweak.xm
 
+      - name: Add Relocate 0.1.16 preference fix
+        shell: bash
+        run: |
+          python3 patch_relocate_016.py Tweak/Tweak.xm
+
       - name: Compile and package rootless
         shell: bash
         run: |
