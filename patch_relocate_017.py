@@ -13,7 +13,11 @@ if 'RLC016 effective flags' not in s or 'RLCFileDebugLog(' not in s:
 marker='@implementation RLCManager'
 if s.count(marker)!=1:
     raise SystemExit('RLCManager implementation marker missing/not unique')
-helper=r'''// RLC017: Refresh effective prefs at actual CoreLocation entry points.
+helper=r'''// RLC015 defines this logger before %ctor, below RLCManager.
+// Forward declaration is required because the RLC017 helper is inserted earlier.
+static void RLCFileDebugLog(NSString *message);
+
+// RLC017: Refresh effective prefs at actual CoreLocation entry points.
 // This addresses cached HBPreferences values when Settings toggles while apps stay alive.
 // No file writes; if disk preferences are inaccessible, preserve the previous state.
 static void RLC017RefreshPrefs(void) {
