@@ -109,45 +109,10 @@ jobs:
           echo "Patched SDK installed"
           ls "$SDK/System/Library/PrivateFrameworks/Preferences.framework"
 
-      - name: Add Relocate 0.1.15 diagnostics
+      - name: Apply consolidated Relocate patch
         shell: bash
         run: |
-          python3 patch_relocate_015.py Tweak/Tweak.xm
-
-      - name: Add Relocate 0.1.16 preference fix
-        shell: bash
-        run: |
-          python3 patch_relocate_016.py Tweak/Tweak.xm
-
-      - name: Apply Relocate 0.1.17 live fix
-        shell: bash
-        run: |
-          python3 patch_relocate_017.py Tweak/Tweak.xm
-
-      - name: Apply Relocate 0.1.18 Apple Maps diagnostics
-        shell: bash
-        run: |
-          python3 patch_relocate_018.py Tweak/Tweak.xm
-
-      - name: Apply Relocate 0.1.19 Apple Maps delegate diagnostics
-        shell: bash
-        run: |
-          python3 patch_relocate_019.py Tweak/Tweak.xm
-
-      - name: Apply Relocate 0.1.20 Apple Maps diagnostics
-        shell: bash
-        run: |
-          python3 patch_relocate_020.py Tweak/Tweak.xm
-
-      - name: Apply Relocate 0.1.21 Apple Maps diagnostics
-        shell: bash
-        run: |
-          python3 patch_relocate_021.py Tweak/Tweak.xm
-
-      - name: Apply Relocate 0.1.22 Apple Maps experiment
-        shell: bash
-        run: |
-          python3 patch_relocate_022.py Tweak/Tweak.xm
+          python3 patch_relocate_merged_022.py Tweak/Tweak.xm
 
       - name: Compile and package rootless
         shell: bash
