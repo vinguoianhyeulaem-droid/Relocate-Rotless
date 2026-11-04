@@ -129,6 +129,11 @@ jobs:
         run: |
           python3 patch_relocate_018.py Tweak/Tweak.xm
 
+      - name: Apply Relocate 0.1.19 Apple Maps delegate diagnostics
+        shell: bash
+        run: |
+          python3 patch_relocate_019.py Tweak/Tweak.xm
+
       - name: Compile and package rootless
         shell: bash
         run: |
