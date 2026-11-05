@@ -109,7 +109,7 @@ jobs:
           echo "Patched SDK installed"
           ls "$SDK/System/Library/PrivateFrameworks/Preferences.framework"
 
-      - name: Apply Relocate Final .23final
+      - name: Apply Relocate Final 0.1.23
         shell: bash
         run: |
           python3 patch_relocate_final_023.py Tweak/Tweak.xm
